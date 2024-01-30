@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "d098dbdd-dbb6-4183-8fd9-b2f4753eac7c",
+		"name": "ApiRestExpress",
+		"description": "Este apartado te guiará a través de las operaciones CRUD (GET, POST, PUT, DELETE), variables y pruebas, centrándose en cómo Express maneja los diferentes métodos HTTP.\n\n🔖 Cómo utilizar esta plantilla  \nPaso 1: Enviar solicitudes  \nLas API REST te permiten realizar operaciones CRUD utilizando los métodos HTTP POST, GET, PUT y DELETE. Esta colección contiene cada uno de estos tipos de solicitud. Abre cada solicitud y haz clic en \"Enviar\" para ver qué sucede.\n\nPaso 2: Ver respuestas  \nObserva la pestaña de respuestas para conocer el código de estado (200 OK), el tiempo de respuesta y el tamaño.\n\nPaso 3: Enviar nuevos datos en el cuerpo  \nActualiza o agrega nuevos datos en el \"Cuerpo\" de la solicitud POST. Normalmente, los datos del cuerpo también se utilizan en la solicitud PUT.\n\n```\njsonCopy code{\n    \"name\": \"Agrega tu nombre en el cuerpo\"\n}\n\n ```\n\nPaso 4: Actualizar la variable  \nLas variables te permiten almacenar y reutilizar valores en Postman. Hemos creado una variable llamada url_development con la solicitud de ejemplo [http://localhost:3000/api/v1](http://localhost:3000/api/v1/categories). Reemplázala con la dirección de tu API para personalizar esta colección.\n\nPaso 5: Agregar pruebas en la pestaña \"Pruebas\"  \nLas pruebas te ayudan a confirmar que tu API funciona como se espera. Puedes escribir scripts de prueba en JavaScript y ver los resultados en la pestaña \"Resultados de la Prueba\".",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31959677",
+		"_collection_link": "https://dark-station-678106.postman.co/workspace/New-Team-Workspace~ae858807-7f8b-4845-8d7c-904e4bb90d02/collection/31959677-d098dbdd-dbb6-4183-8fd9-b2f4753eac7c?action=share&source=collection_link&creator=31959677"
+	},
+	"item": [
+		{
+			"name": "Get Users (GENERAL Y QUERY DINAMICA)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});var template = `",
+							"<style type=\"text/css\">",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+							"    .tftable tr {background-color:#ffffff;}",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+							"    .tftable tr:hover {background-color:#e0ffff;}",
+							"</style>",
+							"",
+							"<table class=\"tftable\" border=\"1\">",
+							"    <tr>",
+							"        <th>ISO Code</th>",
+							"        <th>Language</th>",
+							"    </tr>",
+							"    ",
+							"    {{#each response.soap:Envelope.soap:Body.m:ListOfLanguagesByNameResponse.m:ListOfLanguagesByNameResult.m:tLanguage}}",
+							"        <tr>",
+							"            <td>{{m:sISOCode}}</td>",
+							"            <td>{{m:sName}}</td>",
+							"        </tr>",
+							"    {{/each}}",
+							"</table>",
+							"`;",
+							"",
+							"function constructVisualizerPayload() {",
+							"    var jsonObject = xml2Json(pm.response.text());",
+							"            ",
+							"    return { response: jsonObject }",
+							"}",
+							"",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_development}}/users",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Get UserByID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_development}}/users/1",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users",
+						"1"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Post user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"name\": \"Deivi Stiven\",\n    \"lastname\": \"Herrera Diaz\",\n    \"email\": \"d@g.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_development}}/users",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Put user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Jdduan\",\r\n    \"lastname\": \"Hernandez\",\r\n    \"email\": \"asdad@d.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_development}}/users/1",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put user Copy",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Andres\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_development}}/users/1",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put user Copy 2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_development}}/users/1",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url_desarrollo",
+			"value": "http://localhost:3000/api/v1"
+		},
+		{
+			"key": "id",
+			"value": "1",
+			"disabled": true
+		}
+	]
+}
