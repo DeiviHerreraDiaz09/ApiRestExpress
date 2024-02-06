@@ -1,8 +1,15 @@
+const boom = require('@hapi/boom');
+
 class UserService {
   constructor() {
     this.users = [
-      { id: '1', name: 'Deivi', lastname: 'Herrera', email: 'd@g.com' },
-      { id: 2, name: 'Dayana', lastname: 'Vargas', email: 'v@g.com' },
+      {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        name: 'Deivi',
+        lastname: 'Herrera',
+        email: 'd@g.com',
+      },
+      { id: '2', name: 'Dayana', lastname: 'Vargas', email: 'v@g.com' },
     ];
   }
 
@@ -12,6 +19,7 @@ class UserService {
 
   findOne(id) {
     const user = this.users.find((user) => user.id == id);
+    if (!user) throw boom.notFound('Usuario no encontrado');
     return user;
   }
 
