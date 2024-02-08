@@ -1,4 +1,5 @@
 const express = require('express');
+const fetch = require('node-fetch');
 const router = express.Router();
 const UserService = require('../services/userService');
 const validator = require('../middlewares/validater.js');
@@ -153,7 +154,7 @@ router.patch('/:id', (req, res) => {
 
 // Apartado DELETE
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validator(user_by_id_schema, 'params'), (req, res) => {
   try {
     const { id } = req.params;
     const userIndex = userservice.findIndexUser(id);

@@ -114,47 +114,6 @@
 			"response": []
 		},
 		{
-			"name": "Post user",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": 1,\n    \"name\": \"Deivi Stiven\",\n    \"lastname\": \"Herrera Diaz\",\n    \"email\": \"d@g.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url_development}}/users",
-					"host": [
-						"{{url_development}}"
-					],
-					"path": [
-						"users"
-					]
-				},
-				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-			},
-			"response": []
-		},
-		{
 			"name": "Put user",
 			"request": {
 				"method": "PUT",
@@ -196,13 +155,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url_development}}/users/1",
+					"raw": "{{url_development}}/users/2",
 					"host": [
 						"{{url_development}}"
 					],
 					"path": [
 						"users",
-						"1"
+						"2"
 					]
 				}
 			},
