@@ -1,5 +1,4 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const router = express.Router();
 const UserService = require('../services/userService');
 const validator = require('../middlewares/validater.js');
@@ -10,37 +9,27 @@ const {
   user_by_id_schema_optional,
 } = require('../schemas/user.js');
 
-// Inyección de los servicios
+// Injection of services
 const userservice = new UserService();
-
-// Apartado GET
 
 router.get('/', (req, res, next) => {
   try {
     const user_db = userservice.findUsers();
     const { id } = req.query;
 
-    const validacion = user_by_id_schema_optional.validate(req.query);
-
-    console.log(validacion.error);
-
-    if (validacion.error === undefined) {
-      if (id) {
-        const user = userservice.findOne(id);
-        if (user) {
-          return res.status(200).json({ user });
-        } else {
-          return res.status(404).json({ msg: 'Usuario inexistente' });
-        }
+    if (id) {
+      const validation = user_by_id_schema_optional.validate(req.query);
+      if (validation.error !== undefined) {
+        return res.status(400).json({
+          msg: validation.error.message,
+        });
       }
-    } else {
-      return res.json({
-        msg: validacion.error,
-      });
+      const user = userservice.findOne(id);
+      return res.json(user);
     }
 
     if (user_db.length === 0) {
-      return res.status(404).json({ msg: 'Lista de usuarios vacia' });
+      return res.status(404).json({ msg: 'Users not found' });
     }
     res.status(200).json(user_db);
   } catch (error) {
@@ -60,115 +49,79 @@ router.get('/:id', validator(user_by_id_schema, 'params'), (req, res, next) => {
   }
 });
 
-// Apartado POST
-
-router.post('/', validator(post_user_schema, 'body'), (req, res) => {
+router.post('/', validator(post_user_schema, 'body'), (req, res, next) => {
   try {
     const { id, name, lastname, email } = req.body;
-    const user_data = {
-      id,
-      name,
-      lastname,
-      email,
-    };
-    const created = userservice.create(user_data);
+    const created = userservice.create({ id, name, lastname, email });
     res.status(201).json({
       created,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: error.message || 'Error interno del servidor' });
+    next(error);
   }
 });
 
-// Apartado PUT
-
-router.put('/:id', validator(user_by_id_schema, 'params'), (req, res) => {
+router.put('/:id', validator(user_by_id_schema, 'params'), (req, res, next) => {
   try {
     const { id } = req.params;
-    if (id) {
-      const userIndex = userservice.findIndexUser(id);
-      if (userIndex !== -1) {
-        const { name, lastname, email } = req.body;
-        const user_data = {
-          id,
-          name,
-          lastname,
-          email,
-        };
-        const update = userservice.update(user_data, userIndex);
-        res.status(200).json({
-          user_data,
-        });
-      } else {
-        res.status(404).json({ msg: 'Usuario no encontrado para actualizar' });
-      }
-    } else {
-      res.status(400).json({ msg: 'ID de usuario no proporcionado' });
+    const { name, lastname, email } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ msg: 'User ID not provided' });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: error.message || 'Error interno del servidor' });
-  }
-});
-
-// Apartado PATH
-
-router.patch('/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    if (id) {
-      const userIndex = userservice.findIndexUser(id);
-      if (userIndex !== -1) {
-        const { name, lastname, email } = req.body;
-
-        const validacion = update_user_schema.validate(req.body);
-
-        if (validacion.error === undefined) {
-          const updateUser = userservice.updatePath(
-            name,
-            lastname,
-            email,
-            userIndex,
-          );
-          res.status(200).json({
-            user: updateUser,
-          });
-        } else {
-          res.status(404).json({ msg: validacion.error });
-        }
-      } else {
-        res.status(404).json({ msg: 'Usuario no encontrado para actualizar' });
-      }
-    } else {
-      res.status(400).json({ msg: 'ID de usuario no proporcionado' });
-    }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: error.message || 'Error interno del servidor' });
-  }
-});
-
-// Apartado DELETE
-
-router.delete('/:id', validator(user_by_id_schema, 'params'), (req, res) => {
-  try {
-    const { id } = req.params;
     const userIndex = userservice.findIndexUser(id);
-    if (userIndex !== -1) {
-      const deleteUser = userservice.delete(userIndex);
-      res.status(204).json({ msg: 'Usuario eliminado' });
-    } else {
-      res.status(404).json({ msg: 'Usuario no encontrado' });
-    }
+
+    const update = userservice.update({ id, name, lastname, email }, userIndex);
+    res.status(200).json({
+      update,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: error.message || 'Error interno del servidor' });
+    next(error);
   }
 });
+
+router.patch(
+  '/:id',
+  validator(user_by_id_schema, 'params'),
+  (req, res, next) => {
+    try {
+      const { name, lastname, email } = req.body;
+      if (!req.params.id) {
+        res.status(400).json({ msg: 'User ID not provided' });
+      }
+      const userIndex = userservice.findIndexUser(req.params.id);
+      const validacion = update_user_schema.validate(req.body);
+      if (validacion.error !== undefined) {
+        res.status(404).json({ msg: validacion.error });
+      }
+      const updateUser = userservice.updatePath(
+        { name, lastname, email },
+        userIndex,
+      );
+      res.status(200).json({
+        updateUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.delete(
+  '/:id',
+  validator(user_by_id_schema, 'params'),
+  (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const userIndex = userservice.findIndexUser(id);
+      const deleteUser = userservice.delete(userIndex);
+      if(deleteUser){
+        res.status(200).json({ msg: 'User deleted' });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 module.exports = router;

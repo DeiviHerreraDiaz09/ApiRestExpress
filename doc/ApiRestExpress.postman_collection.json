@@ -1,15 +1,15 @@
 {
 	"info": {
-		"_postman_id": "d098dbdd-dbb6-4183-8fd9-b2f4753eac7c",
+		"_postman_id": "d2cc8520-d71e-4267-bd75-2562cc18a69e",
 		"name": "ApiRestExpress",
 		"description": "Este apartado te guiará a través de las operaciones CRUD (GET, POST, PUT, DELETE), variables y pruebas, centrándose en cómo Express maneja los diferentes métodos HTTP.\n\n🔖 Cómo utilizar esta plantilla  \nPaso 1: Enviar solicitudes  \nLas API REST te permiten realizar operaciones CRUD utilizando los métodos HTTP POST, GET, PUT y DELETE. Esta colección contiene cada uno de estos tipos de solicitud. Abre cada solicitud y haz clic en \"Enviar\" para ver qué sucede.\n\nPaso 2: Ver respuestas  \nObserva la pestaña de respuestas para conocer el código de estado (200 OK), el tiempo de respuesta y el tamaño.\n\nPaso 3: Enviar nuevos datos en el cuerpo  \nActualiza o agrega nuevos datos en el \"Cuerpo\" de la solicitud POST. Normalmente, los datos del cuerpo también se utilizan en la solicitud PUT.\n\n```\njsonCopy code{\n    \"name\": \"Agrega tu nombre en el cuerpo\"\n}\n\n ```\n\nPaso 4: Actualizar la variable  \nLas variables te permiten almacenar y reutilizar valores en Postman. Hemos creado una variable llamada url_development con la solicitud de ejemplo [http://localhost:3000/api/v1](http://localhost:3000/api/v1/categories). Reemplázala con la dirección de tu API para personalizar esta colección.\n\nPaso 5: Agregar pruebas en la pestaña \"Pruebas\"  \nLas pruebas te ayudan a confirmar que tu API funciona como se espera. Puedes escribir scripts de prueba en JavaScript y ver los resultados en la pestaña \"Resultados de la Prueba\".",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31959677",
-		"_collection_link": "https://dark-station-678106.postman.co/workspace/New-Team-Workspace~ae858807-7f8b-4845-8d7c-904e4bb90d02/collection/31959677-d098dbdd-dbb6-4183-8fd9-b2f4753eac7c?action=share&source=collection_link&creator=31959677"
+		"_collection_link": "https://dark-station-678106.postman.co/workspace/New-Team-Workspace~ae858807-7f8b-4845-8d7c-904e4bb90d02/collection/31959677-d2cc8520-d71e-4267-bd75-2562cc18a69e?action=share&source=collection_link&creator=31959677"
 	},
 	"item": [
 		{
-			"name": "Get Users (GENERAL Y QUERY DINAMICA)",
+			"name": "Get Users (GENERAL AND DINAMIC QUERY)",
 			"event": [
 				{
 					"listen": "test",
@@ -92,7 +92,8 @@
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -100,16 +101,42 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url_development}}/users/1",
+					"raw": "{{url_development}}/users/550e8400-e29b-41d4-a716-446655440000",
 					"host": [
 						"{{url_development}}"
 					],
 					"path": [
 						"users",
-						"1"
+						"550e8400-e29b-41d4-a716-446655440000"
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Post User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"550e8400-e29b-41d4-a716-446655448000\",\r\n    \"name\": \"Andy\",\r\n    \"lastname\": \"Hernandez\",\r\n    \"email\": \"d@g.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_development}}/users",
+					"host": [
+						"{{url_development}}"
+					],
+					"path": [
+						"users"
+					]
+				}
 			},
 			"response": []
 		},
@@ -120,7 +147,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Jdduan\",\r\n    \"lastname\": \"Hernandez\",\r\n    \"email\": \"asdad@d.com\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Juan\",\r\n    \"lastname\": \"Hernandez\",\r\n    \"email\": \"asdad@d.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -128,13 +155,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url_development}}/users/1",
+					"raw": "{{url_development}}/users/550e8400-e29b-41d4-a716-446655440000",
 					"host": [
 						"{{url_development}}"
 					],
 					"path": [
 						"users",
-						"1"
+						"550e8400-e29b-41d4-a716-446655440000"
 					]
 				}
 			},
@@ -155,13 +182,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url_development}}/users/2",
+					"raw": "{{url_development}}/users/550e8400-e29b-41d4-a716-446655440000",
 					"host": [
 						"{{url_development}}"
 					],
 					"path": [
 						"users",
-						"2"
+						"550e8400-e29b-41d4-a716-446655440000"
 					]
 				}
 			},
@@ -182,13 +209,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url_development}}/users/1",
+					"raw": "{{url_development}}/users/550e8400-e29b-41d4-a716-424155440000",
 					"host": [
 						"{{url_development}}"
 					],
 					"path": [
 						"users",
-						"1"
+						"550e8400-e29b-41d4-a716-424155440000"
 					]
 				}
 			},

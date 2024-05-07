@@ -10,7 +10,7 @@ app.use(express.json());
 routes(app);
 
 // MIDDLEWARE
-app.use(BoomlogErrorsTwo); // Se ejecuta primero
+app.use(BoomlogErrorsTwo); // Runs first
 // app.use(logErrorsTwo);
 // app.use(logErrors);
 

@@ -24,41 +24,46 @@ class UserService {
 
   findOne(id) {
     const user = this.users.find((user) => user.id == id);
-    if (!user) throw boom.notFound('Usuario no encontrado');
+    if (!user) throw boom.notFound('User not found');
     return user;
   }
 
   create(data) {
     const userIndex = this.users.length;
     const created = this.users.push(data);
-    if (!created) throw boom.badRequest('Fallo en la creación del usuario');
+    if (!created) throw boom.badRequest('Failed to create user');
     return this.users[userIndex];
   }
 
   findIndexUser(id) {
     const userIndex = this.users.findIndex((user) => user.id == id);
-    if (!userIndex) throw boom.badRequest('Indice de usuario no encontrado ');
+    if (userIndex === -1) throw boom.badRequest('User index not found');
     return userIndex;
   }
 
   update(updatedUser, index) {
     const updated = (this.users[index] = updatedUser);
-    if (!updated) throw boom.conflict('Fallo en la actualización del usuario');
+    if (!updated) throw boom.conflict('Failed to update user');
+    return updatedUser;
   }
 
-  updatePath(name, lastname, email, index) {
+  updatePath(data, index) {
+    console.log(data);
+    const { name, lastname, email } = data;
     const userToUpdate = this.users[index];
     if (name) userToUpdate.name = name;
     if (lastname) userToUpdate.lastname = lastname;
     if (email) userToUpdate.email = email;
-    if (!name || !lastname || !email)
-      throw boom.conflict('Fallo en la actualización de campos del usuario');
+    if (name === undefined && lastname === undefined && email === undefined)
+      throw boom.conflict('Failure to update user fields');
     return userToUpdate;
   }
 
   delete(index) {
-    const deleted = this.users.splice(index);
-    if (!deleted) boom.conflict('Fallo en la eliminación del usuario');
+    const deleted = this.users.splice(index, 1);
+    if (deleted.length === 0)
+      boom.conflict('Failed to delete user');
+    return deleted[0];
   }
 }
 

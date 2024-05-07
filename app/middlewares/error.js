@@ -8,21 +8,22 @@ function BoomlogErrorsTwo(error, req, res, next) {
   }
 }
 
-// // MIDDLEWARE DE ERROR GENERAL
+// // GENERAL ERROR MIDDLEWARE
 
 // function logErrors(error, req, res, next) {
-//   console.log('PRUEBA 1');
+//   console.log('Test 1');
 //   console.log(error);
 //   next(error);
 // }
 
-// // MIDDLEWARE DE ERRORES CON FORMATO DE ERROR
+// // ERROR MIDDLEWARE WITH ERROR FORMATTING
 
 // function logErrorsTwo(error, req, res, next) {
-//   console.log('PRUEBA 2');
+//   console.log('Test 2');
 //   res.status(500).json({
 //     msg: error.message,
 //     stack: error.stack,
 //   });
 // }
+
 module.exports = { BoomlogErrorsTwo };
